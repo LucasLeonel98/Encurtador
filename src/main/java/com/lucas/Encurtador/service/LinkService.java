@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -42,5 +41,15 @@ public class LinkService {
         linkRepository.save(linkEntity);
         logger.info("Link gravado com sucesso !");
       return linkEntity;
+    }
+
+    public Link findUrl(String urlEncurted) {
+        logger.info("Link para busca: " + urlEncurted);
+        Link link = linkRepository.findByEncurtedUrl(urlEncurted);
+        if(link == null){
+              throw new IllegalArgumentException("Link não encontrado");
+        }
+        logger.info(link.getRedirectUrl());
+        return link;
     }
 }

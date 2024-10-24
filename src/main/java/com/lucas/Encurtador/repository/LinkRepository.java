@@ -2,8 +2,6 @@ package com.lucas.Encurtador.repository;
 
 import com.lucas.Encurtador.entity.Link;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
@@ -11,5 +9,6 @@ import java.util.UUID;
 public interface LinkRepository extends JpaRepository<Link, UUID> {
 
     Link findByEncurtedUrl(String url );
+
 
 }
