@@ -3,18 +3,16 @@ package com.lucas.Encurtador.controller;
 import com.lucas.Encurtador.dto.CreateUrlReq;
 import com.lucas.Encurtador.entity.Link;
 import com.lucas.Encurtador.service.LinkService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -30,7 +28,8 @@ public class Encurtador {
     public ResponseEntity<Link> encurtaLink(@RequestBody CreateUrlReq data){
         Link link = new Link();
         link = linkService.createLink(data);
-        return  ResponseEntity.ok(link);
+
+        return  ResponseEntity.status(HttpStatusCode.valueOf(201)).body(link);
     }
 
     @GetMapping("/redirect/{urlEncurted}")
@@ -40,5 +39,11 @@ public class Encurtador {
 
         return new RedirectView(link.getRedirectUrl());
 
+    }
+
+    @GetMapping("/links")
+    public Page<Link> getLinks(@RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "page", defaultValue = "0") int page){
+
+        return  linkService.getLinkPages(PageRequest.of(page,size));
     }
 }

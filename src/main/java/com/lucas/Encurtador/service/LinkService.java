@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -51,5 +53,9 @@ public class LinkService {
         }
         logger.info(link.getRedirectUrl());
         return link;
+    }
+
+    public Page<Link> getLinkPages(PageRequest pageRequest) {
+        return linkRepository.findAll(pageRequest);
     }
 }
