@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -26,14 +25,15 @@ public class LinkService {
     LinkRepository linkRepository;
 
     Logger logger = LoggerFactory.getLogger(LinkService.class);
-    public Link createLink(CreateUrlReq data){
+
+    public Link createLink(CreateUrlReq data) {
         String urlEncurtada = stringAleatoria.criaLink(10);
 
-        while(true){
-            if (linkRepository.findByEncurtedUrl(urlEncurtada) != null){
+        while (true) {
+            if (linkRepository.findByEncurtedUrl(urlEncurtada) != null) {
                 logger.error("frase já gravada gerando nova ...");
                 urlEncurtada = stringAleatoria.criaLink(10);
-            }else {
+            } else {
                 break;
             }
         }
@@ -44,14 +44,14 @@ public class LinkService {
         linkEntity.setRedirectUrl(data.urlEncurtar());
         linkRepository.save(linkEntity);
         logger.info("Link gravado com sucesso !");
-      return linkEntity;
+        return linkEntity;
     }
 
     public Link findUrl(String urlEncurted) {
         logger.info("Link para busca: " + urlEncurted);
         Link link = linkRepository.findByEncurtedUrl(urlEncurted);
-        if(link == null){
-              throw new IllegalArgumentException("Link não encontrado");
+        if (link == null) {
+            throw new IllegalArgumentException("Link não encontrado");
         }
         logger.info(link.getRedirectUrl());
         return link;
@@ -70,6 +70,16 @@ public class LinkService {
         link.setRedirectUrl(data.urlEncurtar());
 
         linkRepository.save(link);
+        return link;
+    }
+
+    public Link deleteLink(UUID uuid) {
+        Link link = linkRepository.findByUuid(uuid);
+
+        if (link == null) {
+            throw new IllegalArgumentException("Registro não encontrado. ");
+        }
+        linkRepository.delete(link);
         return link;
     }
 }

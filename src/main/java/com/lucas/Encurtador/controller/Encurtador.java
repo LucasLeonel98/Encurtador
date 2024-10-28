@@ -49,7 +49,12 @@ public class Encurtador {
     }
 
     @PutMapping("/encurta/{uuid}")
-    public ResponseEntity<String> changeLink(@PathVariable(name = "uuid") UUID id, @RequestBody CreateUrlReq data ){
-       return  ResponseEntity.status(201).body(linkService.changeLink(id, data).getEncurtedUrl());
+    public ResponseEntity<Link> changeLink(@PathVariable(name = "uuid") UUID id, @RequestBody CreateUrlReq data ){
+       return  ResponseEntity.status(201).body(linkService.changeLink(id, data));
+    }
+
+    @DeleteMapping("/encurta/{uuid}")
+    public ResponseEntity<Link> deleteLink(@PathVariable(name = "uuid") UUID uuid){
+        return  ResponseEntity.status(201).body(linkService.deleteLink(uuid));
     }
 }
