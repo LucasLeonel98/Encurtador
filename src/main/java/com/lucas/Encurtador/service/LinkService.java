@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -57,5 +59,17 @@ public class LinkService {
 
     public Page<Link> getLinkPages(PageRequest pageRequest) {
         return linkRepository.findAll(pageRequest);
+    }
+
+    public Link changeLink(UUID uuid, CreateUrlReq data) {
+        Link link = linkRepository.findByUuid(uuid);
+
+        if (link == null) {
+            throw new IllegalArgumentException("Registro não encontrado. ");
+        }
+        link.setRedirectUrl(data.urlEncurtar());
+
+        linkRepository.save(link);
+        return link;
     }
 }

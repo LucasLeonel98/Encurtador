@@ -13,6 +13,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -45,5 +46,10 @@ public class Encurtador {
     public Page<Link> getLinks(@RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "page", defaultValue = "0") int page){
 
         return  linkService.getLinkPages(PageRequest.of(page,size));
+    }
+
+    @PutMapping("/encurta/{uuid}")
+    public ResponseEntity<String> changeLink(@PathVariable(name = "uuid") UUID id, @RequestBody CreateUrlReq data ){
+       return  ResponseEntity.status(201).body(linkService.changeLink(id, data).getEncurtedUrl());
     }
 }

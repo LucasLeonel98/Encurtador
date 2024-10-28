@@ -10,6 +10,7 @@ import java.util.UUID;
 public interface LinkRepository extends JpaRepository<Link, UUID> {
 
     Link findByEncurtedUrl(String url );
+   Link findByUuid(UUID uuid);
 
 
 }
