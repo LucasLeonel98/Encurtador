@@ -2,6 +2,7 @@ package com.lucas.Encurtador.controller;
 
 import com.lucas.Encurtador.dto.CreateUrlReq;
 import com.lucas.Encurtador.entity.Link;
+import com.lucas.Encurtador.handler.BodyArgumentInvalidException;
 import com.lucas.Encurtador.service.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

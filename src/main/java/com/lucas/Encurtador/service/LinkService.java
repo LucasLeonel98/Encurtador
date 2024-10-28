@@ -29,6 +29,9 @@ public class LinkService {
     public Link createLink(CreateUrlReq data) {
         String urlEncurtada = stringAleatoria.criaLink(10);
 
+        if ((data.urlEncurtar() == null) ||(data.urlEncurtar().isEmpty())){
+            throw new IllegalArgumentException("Url para encurtar não informada");
+        }
         while (true) {
             if (linkRepository.findByEncurtedUrl(urlEncurtada) != null) {
                 logger.error("frase já gravada gerando nova ...");
