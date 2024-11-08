@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @Component
@@ -68,7 +69,15 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     // Verifica se o endpoint requer autenticação antes de processar a requisição
     private boolean checkIfEndpointIsNotPublic(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        logger.info( " checkIfEndpointIsNotPublic " + requestURI);
+        Boolean encontrou = true;
+
+        for(int i=0;i<SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED.length;i++){
+            encontrou = requestURI.contains(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED[i]);
+            if (encontrou){
+                return !encontrou;
+            }
+        }
+
         return !Arrays.asList(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).contains(requestURI);
     }
 
