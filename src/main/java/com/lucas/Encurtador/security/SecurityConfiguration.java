@@ -63,7 +63,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        return httpSecurity.csrf().disable() // Desativa a proteção contra CSRF
+        return httpSecurity.csrf(crsf -> crsf.disable() ).cors().disable()// Desativa a proteção contra CSRF
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configura a política de criação de sessão como stateless
                 .and().authorizeHttpRequests()// Habilita a autorização para as requisições HTTP
                 .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
