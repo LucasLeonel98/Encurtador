@@ -64,6 +64,10 @@ public class LinkService {
         return linkRepository.findAll(pageRequest);
     }
 
+    public Page<Link> getLink(PageRequest pageRequest, String pesquisa) {
+        return linkRepository.buscaEncurtedUrlOuEncurtedUrl(pageRequest, pesquisa, pesquisa);
+    }
+
     public Link changeLink(UUID uuid, CreateUrlReq data) {
         Link link = linkRepository.findByUuid(uuid);
 

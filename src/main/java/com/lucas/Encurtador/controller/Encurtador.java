@@ -2,7 +2,6 @@ package com.lucas.Encurtador.controller;
 
 import com.lucas.Encurtador.dto.CreateUrlReq;
 import com.lucas.Encurtador.entity.Link;
-import com.lucas.Encurtador.handler.BodyArgumentInvalidException;
 import com.lucas.Encurtador.service.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,8 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.UUID;
 
 @RestController
@@ -49,6 +47,10 @@ public class Encurtador {
         return  linkService.getLinkPages(PageRequest.of(page,size));
     }
 
+    @GetMapping("/links/search/")
+    public Page<Link> getSearchLink(@RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam (name = "busca") String busca){
+        return  linkService.getLink(PageRequest.of(page,size), busca);
+    }
     @PutMapping("/encurta/{uuid}")
     public ResponseEntity<Link> changeLink(@PathVariable(name = "uuid") UUID id, @RequestBody CreateUrlReq data ){
        return  ResponseEntity.status(201).body(linkService.changeLink(id, data));

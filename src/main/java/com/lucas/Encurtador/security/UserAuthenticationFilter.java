@@ -39,6 +39,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
         if (checkIfEndpointIsNotPublic(request)) {
             logger.info("################################Endpoint não publico " + request.getRequestURI());
             String token = recoveryToken(request); // Recupera o token do cabeçalho Authorization da requisição
+            logger.info("TOKEN____________: " + token);
             if (token != null) {
                 String subject = jwtTokenService.getSubjectFromToken(token); // Obtém o assunto (neste caso, o nome de usuário) do token
                 User user = userRepository.findByEmail(subject).get(); // Busca o usuário pelo email (que é o assunto do token)
@@ -59,9 +60,9 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
     // Recupera o token do cabeçalho Authorization da requisição
     private String recoveryToken(HttpServletRequest request) {
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null) {
-            return authorizationHeader.replace("Bearer ", "");
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);  // Retorna o token sem o prefixo "Bearer "
         }
         return null;
     }
