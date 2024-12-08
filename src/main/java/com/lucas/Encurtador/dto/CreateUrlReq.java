@@ -1,8 +1,8 @@
 package com.lucas.Encurtador.dto;
 
 
-
 public record CreateUrlReq(
-        String urlEncurtar
+        String urlEncurtar,
+        Long id
 ) {
 }

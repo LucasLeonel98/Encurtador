@@ -2,12 +2,15 @@ package com.lucas.Encurtador.service;
 
 import com.lucas.Encurtador.dto.CreateUrlReq;
 import com.lucas.Encurtador.entity.Link;
+import com.lucas.Encurtador.entity.User;
 import com.lucas.Encurtador.repository.LinkRepository;
+import com.lucas.Encurtador.repository.UserRepository;
 import com.lucas.Encurtador.util.StringAleatoria;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -18,17 +21,28 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class LinkService {
+    @Value("${baseURl.redirect}")
+    String baseURl;
+
     @Autowired
     StringAleatoria stringAleatoria;
 
     @Autowired
     LinkRepository linkRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     Logger logger = LoggerFactory.getLogger(LinkService.class);
 
     public Link createLink(CreateUrlReq data) {
         String urlEncurtada = stringAleatoria.criaLink(10);
+       User user = new User();
 
+        user = userRepository.byID(data.id());
+        if (user == null ){
+            throw new IllegalArgumentException("Usuário para criação do link não encontrado !");
+        }
         if ((data.urlEncurtar() == null) ||(data.urlEncurtar().isEmpty())){
             throw new IllegalArgumentException("Url para encurtar não informada");
         }
@@ -44,7 +58,9 @@ public class LinkService {
         Link linkEntity = new Link();
         linkEntity.setCreationDateTime(Instant.now().getEpochSecond());
         linkEntity.setEncurtedUrl(urlEncurtada);
+        linkEntity.setCompleteUrl(baseURl + urlEncurtada);
         linkEntity.setRedirectUrl(data.urlEncurtar());
+        linkEntity.setUser(user);
         linkRepository.save(linkEntity);
         logger.info("Link gravado com sucesso !");
         return linkEntity;
@@ -62,6 +78,10 @@ public class LinkService {
 
     public Page<Link> getLinkPages(PageRequest pageRequest) {
         return linkRepository.findAll(pageRequest);
+    }
+
+    public Page<Link> getLinkPagesUser(PageRequest pageRequest, Long id) {
+        return linkRepository.findByUserId(pageRequest, id);
     }
 
     public Page<Link> getLink(PageRequest pageRequest, String pesquisa) {

@@ -31,10 +31,8 @@ public class SecurityConfiguration {
 
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/api/users/login", //url que usaremos para fazer login
             "/api/users", //url que usaremos para criar um usuário
             "/users/login", //url que usaremos para fazer login
-            "/users",
             "api/redirect/",
             "api/redirect/**",
             "api/redirect/*"
@@ -43,10 +41,12 @@ public class SecurityConfiguration {
 
     // Endpoints que requerem autenticação para serem acessados
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
+            "/api/**",
             "/users/test",
             "api/client",
             "/api/links*",
-            "/api/links/search"
+            "/api/links/search",
+            "/users/user"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de cliente

@@ -6,8 +6,10 @@ import com.lucas.Encurtador.service.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -45,6 +47,12 @@ public class Encurtador {
     public Page<Link> getLinks(@RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "page", defaultValue = "0") int page){
 
         return  linkService.getLinkPages(PageRequest.of(page,size));
+    }
+
+    @GetMapping("/{user_id}/links")
+    public Page<Link>  getLinksUser(@PathVariable("user_id") Long id, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "page", defaultValue = "0") int page){
+
+        return  linkService.getLinkPagesUser(PageRequest.of(page,size), id);
     }
 
     @GetMapping("/links/search/")

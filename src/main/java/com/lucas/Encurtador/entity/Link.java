@@ -30,4 +30,11 @@ public class Link {
 
     @Column(nullable = false,length = 255)
     private String encurtedUrl;
+
+    @Column(nullable = true,length = 255)
+    private String completeUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

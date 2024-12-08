@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -46,6 +47,13 @@ public class UserService {
 
         // Gera um token JWT para o usuário autenticado
         return new RecoveryJwtTokenDto(jwtTokenService.generateToken(userDetails));
+    }
+
+    public User getUser(LoginUserDto loginUserDto) {
+        if  (!userRepository.findByEmail(loginUserDto.email()).isPresent()) {
+           throw new NoSuchElementException("Usuário não encontrado !");
+        }
+        return  userRepository.findByEmail(loginUserDto.email()).get();
     }
 
     // Método responsável por criar um usuário

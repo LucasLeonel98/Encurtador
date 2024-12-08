@@ -4,6 +4,8 @@ package com.lucas.Encurtador.controller;
 import com.lucas.Encurtador.dto.CreateUserDto;
 import com.lucas.Encurtador.dto.LoginUserDto;
 import com.lucas.Encurtador.dto.RecoveryJwtTokenDto;
+import com.lucas.Encurtador.dto.RespUSerDto;
+import com.lucas.Encurtador.entity.User;
 import com.lucas.Encurtador.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,14 @@ public class UserController {
     public ResponseEntity<RecoveryJwtTokenDto> authenticateUser(@RequestBody LoginUserDto loginUserDto) {
         RecoveryJwtTokenDto token = userService.authenticateUser(loginUserDto);
         return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<RespUSerDto> getUser(@RequestBody LoginUserDto loginUserDto) {
+         User user = userService.getUser(loginUserDto);
+
+        RespUSerDto respUSerDto = new RespUSerDto(user.getId(),user.getEmail());
+        return new ResponseEntity<RespUSerDto>(respUSerDto, HttpStatus.OK);
     }
 
     @PostMapping
