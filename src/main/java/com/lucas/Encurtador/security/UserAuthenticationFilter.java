@@ -1,7 +1,5 @@
 package com.lucas.Encurtador.security;
 
-
-
 import com.lucas.Encurtador.entity.User;
 import com.lucas.Encurtador.repository.UserRepository;
 import com.lucas.Encurtador.service.LinkService;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 @Component
@@ -37,9 +34,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // Verifica se o endpoint requer autenticação antes de processar a requisição
         if (checkIfEndpointIsNotPublic(request)) {
-            logger.info("################################Endpoint não publico " + request.getRequestURI());
             String token = recoveryToken(request); // Recupera o token do cabeçalho Authorization da requisição
-            logger.info("TOKEN____________: " + token);
             if (token != null) {
                 String subject = jwtTokenService.getSubjectFromToken(token); // Obtém o assunto (neste caso, o nome de usuário) do token
                 User user = userRepository.findByEmail(subject).get(); // Busca o usuário pelo email (que é o assunto do token)

@@ -32,7 +32,7 @@ public class UserController {
         return new ResponseEntity<RespUSerDto>(respUSerDto, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/newuser")
     public ResponseEntity<Void> createUser(@RequestBody CreateUserDto createUserDto) {
         userService.createUser(createUserDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
