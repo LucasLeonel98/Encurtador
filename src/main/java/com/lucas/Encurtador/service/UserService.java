@@ -4,6 +4,7 @@ package com.lucas.Encurtador.service;
 import com.lucas.Encurtador.dto.CreateUserDto;
 import com.lucas.Encurtador.dto.LoginUserDto;
 import com.lucas.Encurtador.dto.RecoveryJwtTokenDto;
+import com.lucas.Encurtador.dto.ResetPasswordDTO;
 import com.lucas.Encurtador.entity.Role;
 import com.lucas.Encurtador.entity.User;
 import com.lucas.Encurtador.repository.UserRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -70,5 +72,21 @@ public class UserService {
 
         // Salva o novo usuário no banco de dados
         userRepository.save(newUser);
+    }
+
+    public void changePassword(Long id, String password) {
+
+        // Cria um novo usuário com os dados fornecidos
+       User user;
+       if (userRepository.findById(id).isPresent()) {
+           user = userRepository.findById(id).get();
+        }
+       else{
+           throw new NoSuchElementException("Usuario não encontrado");
+       }
+
+       user.setPassword(securityConfiguration.passwordEncoder().encode(password));
+        // Salva o novo usuário no banco de dados
+        userRepository.save(user);
     }
 }

@@ -1,10 +1,7 @@
 package com.lucas.Encurtador.controller;
 
 
-import com.lucas.Encurtador.dto.CreateUserDto;
-import com.lucas.Encurtador.dto.LoginUserDto;
-import com.lucas.Encurtador.dto.RecoveryJwtTokenDto;
-import com.lucas.Encurtador.dto.RespUSerDto;
+import com.lucas.Encurtador.dto.*;
 import com.lucas.Encurtador.entity.User;
 import com.lucas.Encurtador.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,12 @@ public class UserController {
     @PostMapping("/newuser")
     public ResponseEntity<Void> createUser(@RequestBody CreateUserDto createUserDto) {
         userService.createUser(createUserDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/user")
+    public ResponseEntity<Void> changePassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        userService.changePassword(resetPasswordDTO.id(), resetPasswordDTO.newPassword());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
